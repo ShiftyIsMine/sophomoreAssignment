@@ -5,7 +5,6 @@ import kr.ac.kopo.shifty.bookmarket.exception.CartException;
 import kr.ac.kopo.shifty.bookmarket.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 
 
 @Service

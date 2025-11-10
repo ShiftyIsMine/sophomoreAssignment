@@ -17,15 +17,10 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Long saveOrder(Long id) {
-        return 0L;
-    }
-
-    @Override
-    public void saveOrder(Order order) {
+    public long saveOrder(Order order) {
         order.setOrderId(getNextOrderId());
         listOfOrders.put(order.getOrderId(), order);
-//        return order.getOrderId();
+        return order.getOrderId();
     }
     private synchronized long getNextOrderId() {
         return nextOrderId++;

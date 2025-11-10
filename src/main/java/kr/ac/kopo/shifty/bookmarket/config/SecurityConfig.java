@@ -3,7 +3,6 @@ package kr.ac.kopo.shifty.bookmarket.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -41,6 +40,7 @@ public class SecurityConfig {
                   authorize -> authorize
                   .requestMatchers("/books/add").hasRole("ADMIN")
                           .requestMatchers("/order/list").hasRole("ADMIN")
+                          .requestMatchers("/order/**").hasRole("ADMIN")
                   .anyRequest().permitAll()
             )
 //            .formLogin(Customizer.withDefaults());
@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/books/add")
                         .defaultSuccessUrl("/order/list")
+                        .defaultSuccessUrl("/")
                         .failureUrl("/loginfailed")
                         .usernameParameter("username")
                         .passwordParameter("password")

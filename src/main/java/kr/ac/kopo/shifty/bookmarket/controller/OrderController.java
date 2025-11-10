@@ -16,9 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -29,7 +27,7 @@ public class OrderController {
     @Autowired
     private CartService cartService;
     Order order;
-    List<Book> listOfBooks;
+    List<Book> listofBooks;
 
     @Autowired
     private OrderProService orderProService;
@@ -42,7 +40,7 @@ public class OrderController {
     public String requestCartList(@PathVariable(value = "cartId") String cartId, Model model) {
         Cart cart =  cartService.validateCart(cartId);
         order = new Order();
-        listOfBooks = new ArrayList<Book>();
+        listofBooks = new ArrayList<Book>();
 
         for(CartItem item : cart.getCartItems().values()){
 
@@ -50,7 +48,7 @@ public class OrderController {
 
             Book book =item.getBook();
 
-            listOfBooks.add(book);
+            listofBooks.add(book);
 
             orderItem.setBookId(book.getBookId());
             orderItem.setQuantity(item.getQuantity());
@@ -101,7 +99,7 @@ public class OrderController {
     @GetMapping("/orderConfirmation")
     public String requestConfirmation( Model model ) {
 
-        model.addAttribute("bookList",listOfBooks);
+        model.addAttribute("bookList",listofBooks);
         model.addAttribute("order",order);
 
         return "orderConfirmation";
@@ -162,34 +160,46 @@ public class OrderController {
 
     @GetMapping("/view/{id}")
     public ModelAndView viewOrder(@PathVariable(name = "id") Long id) {
+
         Order order = orderProService.get(id);
-        List<Book> listOfBooks = new ArrayList<Book>();
-        for(OrderItem orderItem : order.getOrderItems().values()){
-            String bookId = orderItem.getBookId();
+
+        List<Book> listofBooks = new ArrayList<Book>();
+
+        for(OrderItem item : order.getOrderItems().values()){
+            String bookId =item.getBookId();
             Book book = bookService.getBookById(bookId);
-            listOfBooks.add(book);
+
+            listofBooks.add(book);
         }
-        ModelAndView modelAndView = new ModelAndView("orderView");
-        modelAndView.addObject("order",order);
-        modelAndView.addObject("bookList",listOfBooks);
-        return modelAndView;
+        ModelAndView mav = new ModelAndView("orderView");
+        mav.addObject("order", order);
+        mav.addObject("bookList", listofBooks);
+
+
+        return mav;
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView showEditOrder(@PathVariable(value = "id") Long id) {
+    public ModelAndView showEditOrder(@PathVariable(name = "id") Long id) {
+
         Order order = orderProService.get(id);
-        List<Book> listOfBooks = new ArrayList<Book>();
-        for (OrderItem orderItem : order.getOrderItems().values()) {
-            String bookId = orderItem.getBookId();
+
+        List<Book> listofBooks = new ArrayList<Book>();
+
+        for(OrderItem item : order.getOrderItems().values()){
+
+            String bookId =item.getBookId();
             Book book = bookService.getBookById(bookId);
-            listOfBooks.add(book);
+
+            listofBooks.add(book);
         }
 
-        ModelAndView modelAndView = new ModelAndView("orderEdit");
-        modelAndView.addObject("order",order);
-        modelAndView.addObject("bookList",listOfBooks);
-        return modelAndView;
+        ModelAndView mav = new ModelAndView("orderEdit");
+        mav.addObject("order", order);
+        mav.addObject("bookList", listofBooks);
+        return mav;
     }
+
     @GetMapping("/delete/{id}")
     public String deleteOrder(@PathVariable(name = "id") Long id) {
         orderProService.delete(id);

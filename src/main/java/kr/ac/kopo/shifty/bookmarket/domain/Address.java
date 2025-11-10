@@ -19,7 +19,7 @@ public class Address {
     private Long id;
     private String country;
     private String zipcode;
-    private String addressname;
-    private String detailname;
+    private String addressName;
+    private String detailName;
 
 }
